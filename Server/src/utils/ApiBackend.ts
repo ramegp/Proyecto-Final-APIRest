@@ -9,6 +9,7 @@ import { loggerInfo, loggerError, loggerWarn, logger } from '../helpers/logHandl
 import { graphqlHTTP } from "express-graphql";
 
 import {root as graphqlRoot, schema as graphSchema} from '../graphql/graphql'
+import { DBMongo } from "./DBMongo";
 
 
 export class ApiBackend {
@@ -181,11 +182,35 @@ export class ApiBackend {
 
     private configConexionReact = (socket: any) => {
         //conexion con el front
-        socket.on('msj-user', (data: any) => {
-            this.msjSalaFront.push(data);
-            this.io.emit('mensajes', this.msjSalaFront)
+        let db = new DBMongo()
+        let enviar_todos_los_msj = () => { db.showMessages().then((data)=>{
+            this.io.emit('Todos-los-mensajes',data)
+        })}
+
+        let buscar_msj_del_usuario = (email:any) => {db.showMessagesById(email).then((data)=>{
+            socket.emit('Respuesta-mensajes-del-usuario',data)
+        })}
+
+        
+        socket.on('Quiero-todos-los-mensajes',(data:any)=>{
+            
+            enviar_todos_los_msj()
         })
-        socket.on('usuario-conectado', (data: any) => {
+
+        socket.on('Mensajes-del-usuario',(data:any)=>{
+
+            buscar_msj_del_usuario(data)
+        })
+        
+        socket.on('msj-user', (data: any) => {
+            db.addMessage(data)
+            
+            
+            enviar_todos_los_msj()
+        })
+
+        /* ------ */
+        /* socket.on('usuario-conectado', (data: any) => {
             let obj = {
                 id: socket.id,
                 user: data
@@ -195,7 +220,7 @@ export class ApiBackend {
             console.log(`Conectados ${this.userConected.length}`)
         })
         this.io.emit('usuarios-conectados', this.userConected);
-        this.io.emit('mensajes', this.msjSalaFront);
+        this.io.emit('mensajes', this.msjSalaFront); */
     }
 
 

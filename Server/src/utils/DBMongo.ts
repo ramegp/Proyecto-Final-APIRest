@@ -137,7 +137,7 @@ export class DBMongo implements HandlePersistenciaProductos {
     }
     showMessagesById = async (id: string) => {
         let db = this.msg_connect();
-        let message = await db?.MessagesModel.find({ _id: id })
+        let message = await db?.MessagesModel.find({'author.id':id})
         this.msg_disconnect();
 
         return message

@@ -10,11 +10,11 @@ export const avisoInicioSesionSMS = (user:UsuarioPassport) => {
     
     client.messages.create({
         body: `Hola inicio de sesion ${user.user}`,
-        from: credencialesTwilio.number,
+        from: `${credencialesTwilio.number}`,
         //@ts-ignore
         to: `+${user.phone}`
   })
-  .then(message => loggerInfo.info(`Se envio sms al usuario ${user.user} con idSMS ${message.sid}`))
+  .then(message => loggerInfo.info(`Se envio sms al usuario ${user.user} con idSMS ${user.phone}`))
   .catch(console.log)
 }
 
@@ -27,6 +27,6 @@ export const avisoInicioSesionWhatsapp = (user:UsuarioPassport)=>{
         from: 'whatsapp:+14155238886',
         to: `whatsapp:+${user.phone}`
         })
-        .then(message => loggerInfo.info(`Se envio whatsapp al usuario ${user.user}  ${message.sid}`))
+        .then(message => loggerInfo.info(`Se envio whatsapp al usuario ${user.user}  ${user.phone}`))
         .catch(console.log) 
 }

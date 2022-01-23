@@ -137,3 +137,8 @@ npm run dev <File o Mongo>
 ```
 
 Si queremos comprobar que tenemos un solo singleton en la factory ejecutar el archivo src/utils/ProbandoClases.ts `npx ts-node src/utils/ProbandoClases.ts`
+
+
+
+###Front
+Si queremos probar el carrito debemos loguearnos para poder agregar los productos al carrito de otra forma solo podriamos verlos.
